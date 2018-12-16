@@ -4,32 +4,45 @@ import java.io.File;
 public class Directory {
 
 
-        private String DirPath;
-        private File[] listOfFiles;
+    private String DirPath;
+    private File[] listOfFiles;
+
+    /*Método construtor que instância uma classe Directory.
+     *
+     */
+    public Directory() {
+
+    }
 
 
-        public Directory(String path) {
-            this.DirPath = path;
+    /*Método que devolve o diretório do repositório com documentos.
+     *@return DirPath path de um repositório com documentos.
+     */
+    public String getDirPath() {
+        return DirPath;
+    }
+
+
+    /*Método que permite inserir/alterar  o diretório do repositório com documentos.
+     *@param DirPath path de um repositório com documentos.
+     */
+    public void setDirPath(String DirPath) {
+        this.DirPath = DirPath;
+    }
+
+    /*Método responsável por carregar ficheiros localizados na DirPath.
+     *
+     *@return listOfFiles retorna um array do tipo File, que contêm os documentos presentes no DirPath.
+     */
+    public File[] getDocuments() {
+        File dir = new File(this.DirPath);
+
+        if (dir.exists()) {
+            this.listOfFiles = dir.listFiles();
+            return this.listOfFiles;
         }
-
-        public String getDirPath() {
-            return DirPath;
-        }
-
-        public void setDirPath(String DirPath) {
-            this.DirPath = DirPath;
-        }
-
-        public File[] getDocuments() {
-            File dir = new File(this.DirPath);
-            File[] listOfFiles=null;
-            if (dir != null && dir.exists()) {
-                this.listOfFiles = dir.listFiles();
-
-
-            }
-          return listOfFiles;
-        }
+        return null;
+    }
 
 
 }
