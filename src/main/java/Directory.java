@@ -1,4 +1,4 @@
-
+import java.util.Arrays;
 import java.io.File;
 
 public class Directory {
@@ -26,7 +26,7 @@ public class Directory {
     /*Método que permite inserir/alterar  o diretório do repositório com documentos.
      *@param DirPath path de um repositório com documentos.
      */
-    public void setDirPath(String DirPath) {
+     public void setDirPath(String DirPath) {
         this.DirPath = DirPath;
     }
 
@@ -37,9 +37,13 @@ public class Directory {
     public File[] getDocuments() {
         File dir = new File(this.DirPath);
 
-        if (dir.exists()) {
+        if (dir.exists()&& dir.list().length != 0) {
             this.listOfFiles = dir.listFiles();
-            return this.listOfFiles;
+
+            if(listOfFiles!=null) {
+                Arrays.sort(this.listOfFiles);
+                return this.listOfFiles;
+            }
         }
         return null;
     }
