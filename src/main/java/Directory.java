@@ -1,46 +1,50 @@
-import java.util.Arrays;
-import java.io.File;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Scanner;
+
+/**
+ * @author danielcastro
+ */
 public class Directory {
 
 
     private String DirPath;
     private File[] listOfFiles;
 
-    /*Método construtor que instância uma classe Directory.
-     *
+    /**
+     * Constructor method of the Directory Class.
      */
+
     public Directory() {
 
     }
 
-
-    /*Método que devolve o diretório do repositório com documentos.
-     *@return DirPath path de um repositório com documentos.
+    /**
+     * This method allows to change the directory of the repository with documents.
+     *
+     * @param DirPath This is a Strin
      */
-    public String getDirPath() {
-        return DirPath;
-    }
 
-
-    /*Método que permite inserir/alterar  o diretório do repositório com documentos.
-     *@param DirPath path de um repositório com documentos.
-     */
-     public void setDirPath(String DirPath) {
+    public void setDirPath(String DirPath) {
         this.DirPath = DirPath;
     }
 
-    /*Método responsável por carregar ficheiros localizados na DirPath.
+
+    /**
+     * This method is responsible for loading the documents located in the repository.
      *
-     *@return listOfFiles retorna um array do tipo File, que contêm os documentos presentes no DirPath.
+     * @return This returns a File array, that contains all documents that are in the repository.
      */
+
     public File[] getDocuments() {
         File dir = new File(this.DirPath);
 
-        if (dir.exists()&& dir.list().length != 0) {
+        if (dir.exists() && dir.list().length != 0) {
             this.listOfFiles = dir.listFiles();
 
-            if(listOfFiles!=null) {
+            if (listOfFiles != null) {
                 Arrays.sort(this.listOfFiles);
                 return this.listOfFiles;
             }
@@ -48,5 +52,22 @@ public class Directory {
         return null;
     }
 
+
+    /**
+     * This method is responsible for reading the content of each document int the repository.
+     *
+     * @return This returns a String array, that contains all the content of each document of the repository.
+     * @throws FileNotFoundException This throws an exception, isn´t possible to read an document.
+     */
+
+    public String[] readFiles() throws FileNotFoundException {
+        String[] StrFiles = new String[this.listOfFiles.length];
+
+        for (int i = 0; i < this.listOfFiles.length; i++) {
+            String entireFileText = new Scanner(this.listOfFiles[i]).useDelimiter("\\A").next();
+            StrFiles[i] = entireFileText;
+        }
+        return StrFiles;
+    }
 
 }
