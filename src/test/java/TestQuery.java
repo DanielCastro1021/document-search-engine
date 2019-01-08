@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * @author danielcastro
- */
 public class TestQuery {
 
 
@@ -414,5 +411,92 @@ public class TestQuery {
         assertArrayEquals(occurrenceMatrix, query.getOccurrenceMatrix(uniqueWords, stringsWords));
     }
 
+    @Test
+    public void getSearchMatrix_TC1(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix = null;
+        double[][] esperado = null;
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getSearchMatrix_TC2(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+        double[][] esperado = {{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getSearchMatrix_TC3(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix={{-2, -2, -2}, {-2, -2, -2}, {-2, -2, -2}};
+        double[][] esperado = {{-2.0, -2.0, -2.0}, {-2.0, -2.0, -2.0}, {-2.0, -2.0, -2.0}};
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getSearchMatrix_TC4(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix={{2, 2, 2}, {2, 2, 2}, {2, 2, 2}};
+        double[][] esperado = {{2.0, 2.0, 2.0}, {2.0, 2.0, 2.0}, {2.0, 2.0, 2.0}};
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getSearchMatrix_TC5(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix={{0, -2, 0}, {-2, 0, 0}, {0, 0, -2}};
+        double[][] esperado = {{0.0, -2.9542425094393249, 0.0}, {-2.9542425094393249, 0.0, 0.0}, {0.0, 0.0, -2.9542425094393249}};
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getSearchMatrix_TC6(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix={{2, 0, 2}, {2, 0, 0}, {0, 2, 0}};
+        double[][] esperado = {{2.3521825181113625, 0.0, 2.9542425094393249}, {2.3521825181113625, 0.0, 0.0}, {0.0, 2.9542425094393249, 0.0}};
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getSearchMatrix_TC7(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix={{-2, 1, -1}, {2, 3, -1}, {3, -1, 2}};
+        double[][] esperado = {{-2.0, 1.0, -1.0}, {2.0, 3.0, -1.0}, {3.0, -1.0, 2.0}};
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getSearchMatrix_TC8(){
+        Query query = new Query();
+
+        int[][] occurrenceMatrix={{0, 2, -2}, {-1, 0, 1}, {3, 1, 0}};
+        double[][] esperado = {{0.0, 2.3521825181113625, -2.3521825181113625}, {-1.17609125905568124, 0.0, 1.17609125905568124}, {3.528273777167044, 1.17609125905568124, 0.0}};
+        double[][] resultado = query.getSearchMatrix(occurrenceMatrix);
+
+        assertArrayEquals(esperado, resultado);
+    }
 
 }

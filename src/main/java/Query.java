@@ -343,5 +343,108 @@ public class Query {
         return searchMatrix;
     }
 
+    /**
+     * This method returns a matrix with the number of occurrences of each word in all the documents of the repository.
+     *
+     * @param directory
+     * @param input This is an array of doubles with the
+     * @return This method returns by order, the name of the documents according to the search made by the user
+     */
+    public void resultadosNormais(Directory directory, double[] input){
+        double[] arrayD = input;
+        String[] arrayS = new String[arrayD.length];
+
+        for (int i = 0; i<arrayD.length; i++) {
+            arrayS[i] = directory.getDocuments()[i].getName();
+        }
+
+        for (int i = 0; i < arrayD.length; i++) {
+            for (int j = i; j < arrayD.length; j++) {
+                if (arrayD[i] < arrayD[j]) {
+                    double var = arrayD[i];
+                    String str = arrayS[i];
+                    arrayD[i] = arrayD[j];
+                    arrayS[i] = arrayS[j];
+                    arrayS[j] = str;
+                    arrayD[j] = var;
+                }
+            }
+            System.out.println("Ficheiro: " + arrayS[i]);
+            System.out.println("Grau de Similaridade: " + arrayD[i]);
+        }
+    }
+
+    /**
+     * This method returns a matrix with the number of occurrences of each word in all the documents of the repository.
+     *
+     * @param directory
+     * @param input This is an array of doubles with the
+     * @param nficheiros This is the number of files that the user wants to be shown in the return of this method
+     * @return This method returns by order, the name of the documents according to the search made by the user
+     */
+    public void resultadosFicheiros(Directory directory, double[] input, int nficheiros) {
+        double[] arrayD = input;
+        String[] arrayS = new String[arrayD.length];
+
+        for (int i = 0; i<arrayD.length; i++) {
+            arrayS[i] = directory.getDocuments()[i].getName();
+        }
+        int contador = 0;
+
+        for (int i = 0; i < arrayD.length; i++) {
+            for (int j = i; j < arrayD.length; j++) {
+                if (arrayD[i] < arrayD[j]) {
+                    double var = arrayD[i];
+                    String str = arrayS[i];
+                    arrayD[i] = arrayD[j];
+                    arrayS[i] = arrayS[j];
+                    arrayS[j] = str;
+                    arrayD[j] = var;
+                }
+            }
+            System.out.println("Ficheiro: " + arrayS[i]);
+            System.out.println("Grau de Similaridade: " + arrayD[i]);
+            contador++;
+            if (contador == nficheiros) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * This method returns a matrix with the number of occurrences of each word in all the documents of the repository.
+     *
+     * @param directory
+     * @param input This is an array of doubles with the
+     * @param grau
+     * @return This method returns by order, the name of the documents according to the search made by the user
+     */
+    public void resultadosGrau(Directory directory, double[] input, double grau) {
+        double[] arrayD = input;
+        String[] arrayS = new String[arrayD.length];
+
+        for (int i = 0; i<arrayD.length; i++) {
+            arrayS[i] = directory.getDocuments()[i].getName();
+        }
+
+        for (int i = 0; i < arrayD.length; i++) {
+            for (int j = i; j < arrayD.length; j++) {
+                if (arrayD[i] < arrayD[j]) {
+                    double var = arrayD[i];
+                    String str = arrayS[i];
+                    arrayD[i] = arrayD[j];
+                    arrayS[i] = arrayS[j];
+                    arrayS[j] = str;
+                    arrayD[j] = var;
+                }
+            }
+            if (arrayD[i] >= grau) {
+                System.out.println("Ficheiro: " + arrayS[i]);
+                System.out.println("Grau de Similaridade: " + arrayD[i]);
+            } else {
+                break;
+            }
+        }
+    }
 
 }
