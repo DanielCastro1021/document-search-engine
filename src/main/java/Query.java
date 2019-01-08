@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
@@ -16,10 +17,34 @@ public class Query {
     }
 
     /**
+     * Constructor method of the Query Class.
+     */
+    public Query(String Dirpath, String query) throws FileNotFoundException {
+        this.directory = new Directory();
+        changeDirectory(Dirpath);
+        this.directory.getDocuments();
+        this.directory.readFiles();
+        Query(query);
+    }
+
+    /**
      *
      */
-    public void Query() throws FileNotFoundException {
-        preparationPhase();
+    public void Query(String query) throws FileNotFoundException {
+
+
+        double[] results = calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query));
+        File[] files = this.directory.getListOfFiles();
+
+        if(results!=null) {
+            for (int i = 0; i < results.length; i++) {
+
+                System.out.println(results[i] +"=>"+ files[i].getName());
+
+            }
+        }else{
+
+        }
     }
 
 
@@ -48,15 +73,63 @@ public class Query {
     /**
      * This method is responsible for loading of the documents in a repository, removing their punctuation and digits, and creating a search matrix.
      *
-     * @return This returns
+     * @return This returns an search matrix.
      */
-    public double[][] preparationPhase() throws FileNotFoundException {
+    public double[][] preparationPhaseMatrix() throws FileNotFoundException {
         //Loading
-        String[] docsStrings = this.directory.readFiles();
+        String[] docsStrings = this.directory.getStringFiles();
         //Removing punctuation and digits
         docsStrings = cleanStrings(docsStrings);
-        //Creating a search matrix
-        return getSearchMatrix(docsStrings);
+        //Spilt Words in Repository
+        String[][] docsWords = splitRepositoryByWords(docsStrings);
+        //Get Unique Words in Repository
+        String[] uniqueWords = getUniqueWords(docsWords);
+        //Create Search Matrix
+        getSearchMatrix(getOccurrenceMatrix(uniqueWords, docsWords));
+        return getSearchMatrix(getOccurrenceMatrix(uniqueWords, docsWords));
+    }
+
+    public double[] preparationPhaseQuery(String query) throws FileNotFoundException {
+        //Loading
+        String[] docsStrings = this.directory.getStringFiles();
+        //Removing punctuation and digits
+        docsStrings = cleanStrings(docsStrings);
+        //Spilt Words in Repository
+        String[][] docsWords = splitRepositoryByWords(docsStrings);
+        //Get Unique Words in Repository
+        String[] uniqueWords = getUniqueWords(docsWords);
+
+        //Removing punctuation and digits
+        String cleanQuery = cleanString(query);
+        //Spilt Words Query
+        String[] queryWords = splitStringByWords(cleanQuery);
+
+        return getOccurrenceArray(uniqueWords, queryWords);
+    }
+
+    public double[] calculationPhase(double[][] searchMatrix, double[] keyArray) {
+        double[] results = null;
+        double sumMQ = 0;
+        double sumM = 0;
+        double sumQ = 0;
+
+        if (searchMatrix != null && keyArray != null && searchMatrix.length > 0 && keyArray.length > 0) {
+            results = new double[searchMatrix.length];
+
+
+            for (int line = 0; line < searchMatrix.length; line++) {
+                if (searchMatrix[0].length == keyArray.length){
+                    for (int column = 0; column < searchMatrix[line].length; column++) {
+                        sumMQ += (searchMatrix[line][column] * keyArray[column]);
+                        sumM += searchMatrix[line][column];
+                        sumQ += keyArray[column];
+                    }
+                    results[line] = (sumMQ / (Math.abs(Math.sqrt(sumM)) * Math.abs(Math.sqrt(sumQ))));
+                }
+            }
+        }
+
+        return results;
     }
 
     /**
@@ -164,6 +237,8 @@ public class Query {
                 }
             }
             uniqueWords = Arrays.stream(uniqueWords).distinct().toArray(String[]::new);
+
+
         }
         return uniqueWords;
     }
@@ -188,6 +263,28 @@ public class Query {
         return totalWords;
     }
 
+    /**
+     * This method returns an array with the number of occurrences of each word of the Query in all the unique words of the repository.
+     *
+     * @param uniqueWords This is an array of String, with the unique words of a repository.
+     * @param queryWords  This is an array of array of String, that contains the words of a Query.
+     * @return This returns an array with the occurrence the words,of the Query, in all the documents of the repository.
+     */
+    public double[] getOccurrenceArray(String[] uniqueWords, String[] queryWords) {
+        double[] occurrenceArray = null;
+
+        if (uniqueWords != null && queryWords != null && uniqueWords.length > 0 && queryWords.length > 0) {
+            occurrenceArray = new double[uniqueWords.length];
+            for (int j = 0; j < uniqueWords.length; j++) {
+                for (int k = 0; k < queryWords.length; k++) {
+                    if (uniqueWords[j].equals(queryWords[k])) {
+                        occurrenceArray[j]++;
+                    }
+                }
+            }
+        }
+        return occurrenceArray;
+    }
 
     /**
      * This method returns a matrix with the number of occurrences of each word by the document of the repository.
@@ -201,7 +298,7 @@ public class Query {
 
         int[][] occurrenceMatrix = null;
 
-        if (uniqueWords != null && stringsWords != null && uniqueWords.length>0 && stringsWords.length>0) {
+        if (uniqueWords != null && stringsWords != null && uniqueWords.length > 0 && stringsWords.length > 0) {
             occurrenceMatrix = new int[stringsWords.length][uniqueWords.length];
             for (int i = 0; i < stringsWords.length; i++) {
                 for (int j = 0; j < uniqueWords.length; j++) {
@@ -216,19 +313,35 @@ public class Query {
         return occurrenceMatrix;
     }
 
+    /**
+     * This method transforms an occurrence matrix into an search matrix.
+     *
+     * @param occurrenceMatrix This an occurrence matrix with the occurrence of the unique words, in each document of the repository.
+     * @return This returns a search matrix.
+     */
+    public double[][] getSearchMatrix(int[][] occurrenceMatrix) {
+        int d;
+        double[][] searchMatrix = null;
 
+        if (occurrenceMatrix != null) {
+            searchMatrix = new double[occurrenceMatrix.length][occurrenceMatrix[0].length];
 
-    public double[][] getSearchMatrix(String[] strings) {
-        //Split strings by words
-        String[][] docsWords = splitRepositoryByWords(strings);
-        //Get unique words
-        String[] uniqueWords = getUniqueWords(docsWords);
-        //Creating occurrence matrix
-        int[][] occurrenceMatrix = getOccurrenceMatrix(uniqueWords, docsWords);
-
-        double[][] searchMatrix = new double[occurrenceMatrix.length][occurrenceMatrix[0].length];
-        //...
+            for (int i = 0; i < occurrenceMatrix.length; i++) {
+                for (int j = 0; j < occurrenceMatrix[0].length; j++) {
+                    d = 0;
+                    for (int k = 0; k < occurrenceMatrix.length; k++) {
+                        if (occurrenceMatrix[k][j] > 0) {
+                            d++;
+                        }
+                    }
+                    if (d != 0) {
+                        searchMatrix[i][j] = occurrenceMatrix[i][j] + Math.log10((double) occurrenceMatrix.length / d);
+                    }
+                }
+            }
+        }
         return searchMatrix;
     }
+
 
 }
