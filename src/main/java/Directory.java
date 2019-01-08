@@ -12,6 +12,7 @@ public class Directory {
 
     private String DirPath;
     private File[] listOfFiles;
+    private String[] StringFiles;
 
     /**
      * Constructor method of the Directory Class.
@@ -29,8 +30,16 @@ public class Directory {
 
     public void setDirPath(String DirPath) {
         this.DirPath = DirPath;
+        getDocuments();
     }
 
+    public File[] getListOfFiles() {
+        return listOfFiles;
+    }
+
+    public String[] getStringFiles() {
+        return StringFiles;
+    }
 
     /**
      * This method is responsible for loading the documents located in the repository.
@@ -57,7 +66,7 @@ public class Directory {
      * This method is responsible for reading the content of each document int the repository.
      *
      * @return This returns a String array, that contains all the content of each document of the repository.
-     * @throws FileNotFoundException This throws an exception, isn´t possible to read an document.
+     * @throws FileNotFoundException This throws an  FileNotFoundException, if isn´t possible to find a file.
      */
 
     public String[] readFiles() throws FileNotFoundException {
@@ -67,6 +76,8 @@ public class Directory {
             String entireFileText = new Scanner(this.listOfFiles[i]).useDelimiter("\\A").next();
             StrFiles[i] = entireFileText;
         }
+
+        this.StringFiles=StrFiles;
         return StrFiles;
     }
 
