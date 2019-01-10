@@ -47,6 +47,9 @@ public class Query {
         }
     }
 
+     public Directory getDirectory( ){
+       return  this.directory;
+     }
 
     /**
      * This method allows you to insert a location from a repository with documents.
@@ -345,19 +348,18 @@ public class Query {
     /**
      * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param directory
      * @param input This is an array of doubles with the the rate of simulation of each file
      * @return This method returns by order, the name of the documents according
      * to the search made by the user
      */
-    public String[] getResultadosNormais(double[] input) {
+    public String[] getResultadosNormais(Directory directory, double[] input) {
         if (input != null){
 
         double[] arrayD = input;
         String[] arrayS = new String[input.length];
 
         for (int i = 0; i < arrayS.length; i++) {
-            arrayS[i] = this.directory.getDocuments()[i].getName();
+            arrayS[i] = directory.getDocuments()[i].getName();
         }
 
         for (int i = 0; i < input.length; i++) {

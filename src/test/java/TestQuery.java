@@ -522,7 +522,7 @@ public class TestQuery {
         double[] input = {0, 0, 0, 0};
 
         String[] esperado = {"1.txt","2.txt","3.txt","4.txt"};
-        String[] resultado = query.getResultadosNormais(input);
+        String[] resultado = query.getResultadosNormais(directory,input);
 
         assertArrayEquals(esperado, resultado);
     }
