@@ -518,7 +518,7 @@ public class TestQuery {
         Directory directory = new Directory();
         Query query = new Query();
 
-        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        directory.setDirPath("getResultadosTest.WithFiles");
         double[] input = {0, 0, 0, 0};
 
         String[] esperado = {"1.txt","2.txt","3.txt","4.txt"};
