@@ -498,5 +498,284 @@ public class TestQuery {
 
         assertArrayEquals(esperado, resultado);
     }
+//------------------------------------------------------------------------------------------------------------------
+    @Test
+    public void getResultadosNormais_TC1(){
+        Directory directory = new Directory();
+        Query query = new Query();
 
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = null;
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getResultadosNormais_TC2(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {0, 0, 0, 0};
+
+        String[] esperado = {"1.txt","2.txt","3.txt","4.txt"};
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getResultadosNormais_TC3(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {-2, -4, -1, -3};
+
+        String[] esperado = {"3.txt","1.txt","4.txt","2.txt"};
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    public void getResultadosNormais_TC4(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {5, 7, 8, 2};
+
+        String[] esperado = {"3.txt","2.txt","1.txt","4.txt"};
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosNormais_TC5(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {0, -7, 0, -2};
+
+        String[] esperado = {"1.txt","3.txt","4.txt","2.txt"};
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosNormais_TC6(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {0, 7, 0, 2};
+
+        String[] esperado = {"2.txt","4.txt","3.txt","1.txt"};
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosNormais_TC7(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {-5, 7, -8, 2};
+
+        String[] esperado = {"2.txt","4.txt","1.txt","3.txt"};
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosNormais_TC8(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {-5, 7, 0, 2};
+
+        String[] esperado = {"2.txt","4.txt","3.txt","1.txt"};
+        String[] resultado = query.getResultadosNormais(directory, input);
+
+        assertArrayEquals(esperado,resultado);
+    }
+    //-------------------------------------------------------------------------------------------------
+    @Test
+    public void getResultadosFicheiros_TC1(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = null;
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosFicheiros(directory, input, -2);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosFicheiros_TC2(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = null;
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosFicheiros(directory, input, 0);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosFicheiros_TC3(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = null;
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosFicheiros(directory, input, 2);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosFicheiros_TC4(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {5, 7, 8, 2};
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosFicheiros(directory, input, -2);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosFicheiros_TC5(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {5, 7, 8, 2};
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosFicheiros(directory, input, 0);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosFicheiros_TC6(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {5, 7, 8, 2};
+
+        String[] esperado = {"3.txt", "2.txt"};
+        String[] resultado = query.getResultadosFicheiros(directory, input, 2);
+
+        assertArrayEquals(esperado,resultado);
+    }
+    //-------------------------------------------------------------------------------------------------
+    @Test
+    public void getResultadosGrau_TC1(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = null;
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosGrau(directory, input, -2);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosGrau_TC2(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = null;
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosGrau(directory, input, 0);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosGrau_TC3(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = null;
+
+        String[] esperado = null;
+        String[] resultado = query.getResultadosGrau(directory, input, 2);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosGrau_TC4(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {5, 7, 8, 2};
+
+        String[] esperado = {"3.txt", "2.txt", "1.txt", "4.txt"};
+        String[] resultado = query.getResultadosGrau(directory, input, -2);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosGrau_TC5(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {5, 7, 8, 2};
+
+        String[] esperado = {"3.txt", "2.txt", "1.txt", "4.txt"};
+        String[] resultado = query.getResultadosGrau(directory, input, 0);
+
+        assertArrayEquals(esperado,resultado);
+    }
+
+    @Test
+    public void getResultadosGrau_TC6(){
+        Directory directory = new Directory();
+        Query query = new Query();
+
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
+        double[] input = {5, 7, 8, 2};
+
+        String[] esperado = {"3.txt", "2.txt"};
+        String[] resultado = query.getResultadosGrau(directory, input, 6);
+
+        assertArrayEquals(esperado,resultado);
+    }
 }

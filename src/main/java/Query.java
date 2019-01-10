@@ -325,17 +325,16 @@ public class Query {
 
         if (occurrenceMatrix != null) {
             searchMatrix = new double[occurrenceMatrix.length][occurrenceMatrix[0].length];
-
             for (int i = 0; i < occurrenceMatrix.length; i++) {
                 for (int j = 0; j < occurrenceMatrix[0].length; j++) {
                     d = 0;
                     for (int k = 0; k < occurrenceMatrix.length; k++) {
-                        if (occurrenceMatrix[k][j] > 0) {
+                        if (occurrenceMatrix[k][j] != 0) {
                             d++;
                         }
                     }
                     if (d != 0) {
-                        searchMatrix[i][j] = occurrenceMatrix[i][j] + Math.log10((double) occurrenceMatrix.length / d);
+                        searchMatrix[i][j] = occurrenceMatrix[i][j] * (1 + Math.log10((double) occurrenceMatrix.length / d));
                     }
                 }
             }
@@ -344,22 +343,25 @@ public class Query {
     }
 
     /**
-     * This method returns a matrix with the number of occurrences of each word in all the documents of the repository.
+     * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
      * @param directory
-     * @param input This is an array of doubles with the
-     * @return This method returns by order, the name of the documents according to the search made by the user
+     * @param input This is an array of doubles with the the rate of simulation of each file
+     * @return This method returns by order, the name of the documents according
+     * to the search made by the user
      */
-    public void resultadosNormais(Directory directory, double[] input){
-        double[] arrayD = input;
-        String[] arrayS = new String[arrayD.length];
+    public String[] getResultadosNormais(Directory directory, double[] input) {
+        if (input != null){
 
-        for (int i = 0; i<arrayD.length; i++) {
+        double[] arrayD = input;
+        String[] arrayS = new String[input.length];
+
+        for (int i = 0; i < arrayS.length; i++) {
             arrayS[i] = directory.getDocuments()[i].getName();
         }
 
-        for (int i = 0; i < arrayD.length; i++) {
-            for (int j = i; j < arrayD.length; j++) {
+        for (int i = 0; i < input.length; i++) {
+            for (int j = i; j < input.length; j++) {
                 if (arrayD[i] < arrayD[j]) {
                     double var = arrayD[i];
                     String str = arrayS[i];
@@ -369,66 +371,86 @@ public class Query {
                     arrayD[j] = var;
                 }
             }
-            System.out.println("Ficheiro: " + arrayS[i]);
-            System.out.println("Grau de Similaridade: " + arrayD[i]);
+        }
+            return arrayS;
+        }else{
+            String[] arrayS = null;
+            return arrayS;
         }
     }
 
     /**
-     * This method returns a matrix with the number of occurrences of each word in all the documents of the repository.
+     * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
      * @param directory
-     * @param input This is an array of doubles with the
-     * @param nficheiros This is the number of files that the user wants to be shown in the return of this method
-     * @return This method returns by order, the name of the documents according to the search made by the user
+     * @param input This is an array of doubles with the the rate of simulation of each file
+     * @param nficheiros This is the number of files that the user wants to be
+     * shown in the return of this method
+     * @return This method returns by order, the name of the documents according
+     * to the search made by the user
      */
-    public void resultadosFicheiros(Directory directory, double[] input, int nficheiros) {
-        double[] arrayD = input;
-        String[] arrayS = new String[arrayD.length];
+    public String[] getResultadosFicheiros(Directory directory, double[] input, int nficheiros) {
+        if(input != null && nficheiros > 0) {
 
-        for (int i = 0; i<arrayD.length; i++) {
-            arrayS[i] = directory.getDocuments()[i].getName();
+            double[] arrayD = input;
+            String[] arrayS = new String[input.length];
+            int contador = 0;
+
+            for (int i = 0; i < arrayS.length; i++) {
+                arrayS[i] = directory.getDocuments()[i].getName();
+            }
+
+            for (int i = 0; i < input.length; i++) {
+                for (int j = i; j < input.length; j++) {
+                    if (arrayD[i] < arrayD[j]) {
+                        double var = arrayD[i];
+                        String str = arrayS[i];
+                        arrayD[i] = arrayD[j];
+                        arrayS[i] = arrayS[j];
+                        arrayS[j] = str;
+                        arrayD[j] = var;
+                    }
+                }
+                contador++;
+                if (contador == nficheiros) {
+                    break;
+                }
+            }
+
+            String[] arrayS2 = new String[contador];
+
+            for(int p = 0; p<contador; p++){
+                arrayS2[p] = arrayS[p];
+            }
+            return arrayS2;
+        }else{
+            String[] arrayS = null;
+            return arrayS;
         }
+    }
+
+    /**
+     * This method returns the files ordered by their rate of simulation (Highest to Lowest)
+     *
+     * @param directory
+     * @param input This is an array of doubles with the the rate of simulation of each file
+     * @param grau
+     * @return This method returns by order, the name of the documents according
+     * to the search made by the user
+     */
+    public String[] getResultadosGrau(Directory directory, double[] input, double grau) {
+        if(input != null){
+
+        double[] arrayD = input;
+        String[] arrayS = new String[input.length];
         int contador = 0;
 
-        for (int i = 0; i < arrayD.length; i++) {
-            for (int j = i; j < arrayD.length; j++) {
-                if (arrayD[i] < arrayD[j]) {
-                    double var = arrayD[i];
-                    String str = arrayS[i];
-                    arrayD[i] = arrayD[j];
-                    arrayS[i] = arrayS[j];
-                    arrayS[j] = str;
-                    arrayD[j] = var;
-                }
-            }
-            System.out.println("Ficheiro: " + arrayS[i]);
-            System.out.println("Grau de Similaridade: " + arrayD[i]);
-            contador++;
-            if (contador == nficheiros) {
-                break;
-            }
-        }
-    }
-
-    /**
-     * This method returns a matrix with the number of occurrences of each word in all the documents of the repository.
-     *
-     * @param directory
-     * @param input This is an array of doubles with the
-     * @param grau
-     * @return This method returns by order, the name of the documents according to the search made by the user
-     */
-    public void resultadosGrau(Directory directory, double[] input, double grau) {
-        double[] arrayD = input;
-        String[] arrayS = new String[arrayD.length];
-
-        for (int i = 0; i<arrayD.length; i++) {
+        for (int i = 0; i < arrayS.length; i++) {
             arrayS[i] = directory.getDocuments()[i].getName();
         }
 
-        for (int i = 0; i < arrayD.length; i++) {
-            for (int j = i; j < arrayD.length; j++) {
+        for (int i = 0; i < input.length; i++) {
+            for (int j = i; j < input.length; j++) {
                 if (arrayD[i] < arrayD[j]) {
                     double var = arrayD[i];
                     String str = arrayS[i];
@@ -438,13 +460,21 @@ public class Query {
                     arrayD[j] = var;
                 }
             }
-            if (arrayD[i] >= grau) {
-                System.out.println("Ficheiro: " + arrayS[i]);
-                System.out.println("Grau de Similaridade: " + arrayD[i]);
-            } else {
+            if (arrayD[i] < grau) {
                 break;
             }
+            contador++;
+        }
+
+        String[] arrayS2 = new String[contador];
+
+        for (int i = 0; i < contador; i++) {
+            arrayS2[i] = arrayS[i];
+        }
+        return arrayS2;
+    }else{
+        String[] arrayS = null;
+        return arrayS;
         }
     }
-
 }
