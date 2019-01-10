@@ -518,11 +518,11 @@ public class TestQuery {
         Directory directory = new Directory();
         Query query = new Query();
 
-        directory.setDirPath("https://github.com/DanielCastro1021/ES-II-Projeto-II/tree/master/src/test/java/getResultadosTest/WithFiles");
+        directory.setDirPath("src\\test\\java\\getResultadosTest\\WithFiles");
         double[] input = {0, 0, 0, 0};
 
         String[] esperado = {"1.txt","2.txt","3.txt","4.txt"};
-        String[] resultado = query.getResultadosNormais(directory, input);
+        String[] resultado = query.getResultadosNormais(input);
 
         assertArrayEquals(esperado, resultado);
     }

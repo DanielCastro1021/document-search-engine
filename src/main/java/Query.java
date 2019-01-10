@@ -350,14 +350,14 @@ public class Query {
      * @return This method returns by order, the name of the documents according
      * to the search made by the user
      */
-    public String[] getResultadosNormais(Directory directory, double[] input) {
+    public String[] getResultadosNormais(double[] input) {
         if (input != null){
 
         double[] arrayD = input;
         String[] arrayS = new String[input.length];
 
         for (int i = 0; i < arrayS.length; i++) {
-            arrayS[i] = directory.getDocuments()[i].getName();
+            arrayS[i] = this.directory.getDocuments()[i].getName();
         }
 
         for (int i = 0; i < input.length; i++) {
