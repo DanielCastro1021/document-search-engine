@@ -32,10 +32,12 @@ jacoco {
 }
 jacocoTestReport {
     reports {
+        //noinspection GroovyAssignabilityCheck
         html.enabled true
+        //noinspection GroovyAssignabilityCheck
         xml.enabled false
+        //noinspection GroovyAssignabilityCheck
         csv.enabled false
-
     }
 }
 

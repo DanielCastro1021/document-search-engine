@@ -24,7 +24,7 @@ public class Query {
         this.directory = new Directory();
         changeDirectory(directoryPath);
         this.directory.loadDocumentsContent();
-        getResults(calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query)));
+        getResults(calculationPhase(preparationPhaseSearchMatrix(), preparationPhaseQuery(query)));
     }
 
     /**
@@ -34,7 +34,7 @@ public class Query {
         this.directory = new Directory();
         changeDirectory(directoryPath);
         this.directory.loadDocumentsContent();
-        getResultsByNumberOfFiles(calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query)), numberOfFiles);
+        getResultsByNumberOfFiles(calculationPhase(preparationPhaseSearchMatrix(), preparationPhaseQuery(query)), numberOfFiles);
     }
 
     /**
@@ -44,7 +44,7 @@ public class Query {
         this.directory = new Directory();
         changeDirectory(directoryPath);
         this.directory.loadDocumentsContent();
-        getResultsByDegreeOfSimilarity(calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query)), similarityDegree);
+        getResultsByDegreeOfSimilarity(calculationPhase(preparationPhaseSearchMatrix(), preparationPhaseQuery(query)), similarityDegree);
     }
 
 
@@ -57,7 +57,7 @@ public class Query {
      *
      * @return This returns an search matrix.
      */
-    public double[][] preparationPhaseMatrix() {
+    public double[][] preparationPhaseSearchMatrix() {
         //Loading
         String[] docsStrings = this.directory.getStringFiles();
         //Removing punctuation and digits
@@ -139,17 +139,12 @@ public class Query {
      * @return This returns true if the path was successfully entered, false if this does not happen.
      */
 
-    public boolean changeDirectory(String path) throws FileNotFoundException {
+    public boolean changeDirectory(String path) {
         if (path == null) {
             return false;
         } else {
             directory.setDirectoryPath(path);
-
-            if (directory.loadDocuments() == null) {
-                return false;
-            } else {
-                return true;
-            }
+            return directory.loadDocuments() != null;
         }
     }
 
@@ -251,9 +246,9 @@ public class Query {
 
         if (stringsWords != null) {
             uniqueWords = new String[getTotalWords(stringsWords)];
-            for (int i = 0; i < stringsWords.length; i++) {
-                for (int j = 0; j < stringsWords[i].length; j++) {
-                    uniqueWords[k] = stringsWords[i][j];
+            for (String[] stringsWord : stringsWords) {
+                for (String s : stringsWord) {
+                    uniqueWords[k] = s;
                     k++;
                 }
             }
@@ -275,8 +270,8 @@ public class Query {
         int totalWords = 0;
 
         if (stringsWords != null) {
-            for (int i = 0; i < stringsWords.length; i++) {
-                for (int j = 0; j < stringsWords[i].length; j++) {
+            for (String[] stringsWord : stringsWords) {
+                for (int j = 0; j < stringsWord.length; j++) {
                     totalWords++;
                 }
             }
@@ -297,8 +292,8 @@ public class Query {
         if (uniqueWords != null && queryWords != null && uniqueWords.length > 0 && queryWords.length > 0) {
             occurrenceArray = new int[uniqueWords.length];
             for (int j = 0; j < uniqueWords.length; j++) {
-                for (int k = 0; k < queryWords.length; k++) {
-                    if (uniqueWords[j].equals(queryWords[k])) {
+                for (String queryWord : queryWords) {
+                    if (uniqueWords[j].equals(queryWord)) {
                         occurrenceArray[j]++;
                     }
                 }
@@ -349,8 +344,8 @@ public class Query {
             for (int i = 0; i < occurrenceMatrix.length; i++) {
                 for (int j = 0; j < occurrenceMatrix[0].length; j++) {
                     d = 0;
-                    for (int k = 0; k < occurrenceMatrix.length; k++) {
-                        if (occurrenceMatrix[k][j] != 0) {
+                    for (int[] occurrenceMatrix1 : occurrenceMatrix) {
+                        if (occurrenceMatrix1[j] != 0) {
                             d++;
                         }
                     }
@@ -371,24 +366,21 @@ public class Query {
      * to the search made by the user
      */
     public String[] getResults(double[] results) {
-
         if (results != null) {
-            double[] arrayD = results;
             String[] arrayS = new String[results.length];
-            File[]listOfFiles=this.directory.getListOfFiles();
+            File[] listOfFiles = this.directory.getListOfFiles();
             for (int i = 0; i < arrayS.length; i++) {
                 arrayS[i] = listOfFiles[i].getName();
             }
-
             for (int i = 0; i < results.length; i++) {
                 for (int j = i; j < results.length; j++) {
-                    if (arrayD[i] < arrayD[j]) {
-                        double var = arrayD[i];
+                    if (results[i] < results[j]) {
+                        double var = results[i];
                         String str = arrayS[i];
-                        arrayD[i] = arrayD[j];
+                        results[i] = results[j];
                         arrayS[i] = arrayS[j];
                         arrayS[j] = str;
-                        arrayD[j] = var;
+                        results[j] = var;
                     }
                 }
             }
@@ -408,36 +400,32 @@ public class Query {
     public String[] getResultsByNumberOfFiles(double[] input, int numberOfFiles) {
 
         if (input != null && numberOfFiles > 0) {
-            double[] arrayD = input;
             String[] arrayS = new String[input.length];
-            int contador = 0;
-            File[]listOfFiles=this.directory.getListOfFiles();
+            int counter = 0;
+            File[] listOfFiles = this.directory.getListOfFiles();
             for (int i = 0; i < arrayS.length; i++) {
                 arrayS[i] = listOfFiles[i].getName();
             }
 
             for (int i = 0; i < input.length; i++) {
                 for (int j = i; j < input.length; j++) {
-                    if (arrayD[i] < arrayD[j]) {
-                        double var = arrayD[i];
+                    if (input[i] < input[j]) {
+                        double var = input[i];
                         String str = arrayS[i];
-                        arrayD[i] = arrayD[j];
+                        input[i] = input[j];
                         arrayS[i] = arrayS[j];
                         arrayS[j] = str;
-                        arrayD[j] = var;
+                        input[j] = var;
                     }
                 }
-                contador++;
-                if (contador == numberOfFiles) {
+                counter++;
+                if (counter == numberOfFiles) {
                     break;
                 }
             }
 
-            String[] arrayS2 = new String[contador];
-
-            for (int p = 0; p < contador; p++) {
-                arrayS2[p] = arrayS[p];
-            }
+            String[] arrayS2 = new String[counter];
+            System.arraycopy(arrayS, 0, arrayS2, 0, counter);
             return arrayS2;
         } else {
             return null;
@@ -447,44 +435,39 @@ public class Query {
     /**
      * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param results This is an array of doubles with the the rate of simulation of each file
-     * @param degreeOfSimilarity
-     * @return This method returns by order, the name of the documents according to the search made by the user
+     * @param results This is an array of doubles with the the rate of simulation of each file.
+     * @param degreeOfSimilarity This is the minimum degreeOfSimilarity defined by the User.
+     * @return This method returns by crescent order, he name of the documents according to the search made by the user.
      */
     public String[] getResultsByDegreeOfSimilarity(double[] results, double degreeOfSimilarity) {
 
         if (results != null) {
-            double[] arrayD = results;
             String[] arrayS = new String[results.length];
-            int contador = 0;
+            int counter = 0;
 
-            File[]listOfFiles=this.directory.getListOfFiles();
+            File[] listOfFiles = this.directory.getListOfFiles();
             for (int i = 0; i < arrayS.length; i++) {
                 arrayS[i] = listOfFiles[i].getName();
             }
 
             for (int i = 0; i < results.length; i++) {
                 for (int j = i; j < results.length; j++) {
-                    if (arrayD[i] < arrayD[j]) {
-                        double var = arrayD[i];
+                    if (results[i] < results[j]) {
+                        double var = results[i];
                         String str = arrayS[i];
-                        arrayD[i] = arrayD[j];
+                        results[i] = results[j];
                         arrayS[i] = arrayS[j];
                         arrayS[j] = str;
-                        arrayD[j] = var;
+                        results[j] = var;
                     }
                 }
-                if (arrayD[i] < degreeOfSimilarity) {
+                if (results[i] < degreeOfSimilarity) {
                     break;
                 }
-                contador++;
+                counter++;
             }
-
-            String[] arrayS2 = new String[contador];
-
-            for (int i = 0; i < contador; i++) {
-                arrayS2[i] = arrayS[i];
-            }
+            String[] arrayS2 = new String[counter];
+            System.arraycopy(arrayS, 0, arrayS2, 0, counter);
             return arrayS2;
         } else {
             return null;
