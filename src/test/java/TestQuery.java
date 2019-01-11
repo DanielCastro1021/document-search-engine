@@ -1,8 +1,6 @@
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
-
 import java.io.FileNotFoundException;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,30 +8,30 @@ public class TestQuery {
 
 
     @Test
-    public void changeDirectory_TC1() {
+    public void changeDirectory_TC1() throws FileNotFoundException {
         Query query = new Query();
         assertEquals(false, query.changeDirectory(null));
     }
 
 
     @Test
-    public void changeDirectory_TC2() {
-        String path = "file";
+    public void changeDirectory_TC2()throws FileNotFoundException  {
+        String path = "testfile";
         Query query = new Query();
         assertEquals(false, query.changeDirectory(path));
     }
 
 
     @Test
-    public void changeDirectory_TC3() {
+    public void changeDirectory_TC3() throws FileNotFoundException {
         String path = "filestest";
         Query query = new Query();
         assertEquals(false, query.changeDirectory(path));
     }
 
 
-    @Disabled
-    public void changeDirectory_TC4() {
+    @Test
+    public void changeDirectory_TC4() throws FileNotFoundException {
         String path = "files";
         Query query = new Query();
         assertEquals(true, query.changeDirectory(path));
@@ -498,16 +496,14 @@ public class TestQuery {
     @Test
     public void getResults_TC1() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
         assertArrayEquals(null, query.getResults(null));
     }
 
     @Test
     public void getResults_TC2() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {0, 0, 0, 0};
         String[] esperado = {"1.txt", "2.txt", "3.txt", "4.txt"};
@@ -518,8 +514,7 @@ public class TestQuery {
     @Test
     public void getResults_TC3() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {-2, -4, -1, -3};
         String[] esperado = {"3.txt", "1.txt", "4.txt", "2.txt"};
@@ -530,8 +525,7 @@ public class TestQuery {
     @Test
     public void getResults_TC4() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {5, 7, 8, 2};
         String[] esperado = {"3.txt", "2.txt", "1.txt", "4.txt"};
@@ -543,8 +537,7 @@ public class TestQuery {
     @Test
     public void getResults_TC5() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {0, -7, 0, -2};
         String[] esperado = {"1.txt", "3.txt", "4.txt", "2.txt"};
@@ -555,8 +548,7 @@ public class TestQuery {
     @Test
     public void getResults_TC6() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {0, 7, 0, 2};
         String[] esperado = {"2.txt", "4.txt", "3.txt", "1.txt"};
@@ -567,8 +559,7 @@ public class TestQuery {
     @Test
     public void getResults_TC7() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {-5, 7, -8, 2};
         String[] esperado = {"2.txt", "4.txt", "1.txt", "3.txt"};
@@ -579,8 +570,7 @@ public class TestQuery {
     @Test
     public void getResults_TC8() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {-5, 7, 0, 2};
         String[] esperado = {"2.txt", "4.txt", "3.txt", "1.txt"};
@@ -591,8 +581,7 @@ public class TestQuery {
     @Test
     public void getResultsByNumberOfFiles_TC1() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         assertArrayEquals(null, query.getResultsByNumberOfFiles(null, -2));
     }
@@ -600,8 +589,7 @@ public class TestQuery {
     @Test
     public void getResultsByNumberOfFiles_TC2() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         assertArrayEquals(null, query.getResultsByNumberOfFiles(null, 0));
     }
@@ -609,8 +597,7 @@ public class TestQuery {
     @Test
     public void getResultsByNumberOfFiles_TC3() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         assertArrayEquals(null, query.getResultsByNumberOfFiles(null, 2));
     }
@@ -618,8 +605,7 @@ public class TestQuery {
     @Test
     public void getResultsByNumberOfFiles_TC4() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {5, 7, 8, 2};
 
@@ -629,8 +615,7 @@ public class TestQuery {
     @Test
     public void getResultsByNumberOfFiles_TC5() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {5, 7, 8, 2};
 
@@ -640,8 +625,7 @@ public class TestQuery {
     @Test
     public void getResultsByNumberOfFiles_TC6() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {5, 7, 8, 2};
         String[] esperado = {"3.txt", "2.txt"};
@@ -652,17 +636,14 @@ public class TestQuery {
     @Test
     public void getResultsByDegreeOfSimilarity_TC1() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
-
+        query.changeDirectory("files");
         assertArrayEquals(null, query.getResultsByDegreeOfSimilarity(null, -2));
     }
 
     @Test
     public void getResultsByDegreeOfSimilarity_TC2() throws FileNotFoundException {
-        Directory directory = new Directory();
         Query query = new Query();
-        directory.setDirectoryPath("files");
+        query.changeDirectory("files");
 
         assertArrayEquals(null, query.getResultsByDegreeOfSimilarity(null, 0));
     }
@@ -670,8 +651,7 @@ public class TestQuery {
     @Test
     public void getResultsByDegreeOfSimilarity_TC3() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         assertArrayEquals(null, query.getResultsByDegreeOfSimilarity(null, 2));
     }
@@ -679,8 +659,7 @@ public class TestQuery {
     @Test
     public void getResultsByDegreeOfSimilarity_TC4() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {5, 7, 8, 2};
         String[] esperado = {"3.txt", "2.txt", "1.txt", "4.txt"};
@@ -691,8 +670,7 @@ public class TestQuery {
     @Test
     public void getResultsByDegreeOfSimilarity_TC5() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {5, 7, 8, 2};
         String[] esperado = {"3.txt", "2.txt", "1.txt", "4.txt"};
@@ -703,8 +681,7 @@ public class TestQuery {
     @Test
     public void getResultsByDegreeOfSimilarity_TC6() throws FileNotFoundException {
         Query query = new Query();
-        query.getDirectory().setDirectoryPath("files");
-        query.getDirectory().loadDocumentsContent();
+        query.changeDirectory("files");
 
         double[] input = {5, 7, 8, 2};
         String[] esperado = {"3.txt", "2.txt"};
@@ -717,8 +694,6 @@ public class TestQuery {
         Query query = new Query();
         query.changeDirectory("file");
         query.getDirectory().loadDocumentsContent();
-
-
         assertArrayEquals(null, query.preparationPhaseQuery(null));
     }
 
@@ -727,7 +702,6 @@ public class TestQuery {
         Query query = new Query();
         query.changeDirectory("file");
         query.getDirectory().loadDocumentsContent();
-
         assertArrayEquals(null, query.preparationPhaseQuery(" "));
     }
 
@@ -759,6 +733,7 @@ public class TestQuery {
         Query query = new Query();
         query.changeDirectory("file");
         query.getDirectory().loadDocumentsContent();
+
         int[] arrayQuery = new int[2];
         arrayQuery[0] = 1;
         arrayQuery[1] = 0;
@@ -781,7 +756,6 @@ public class TestQuery {
     public void preparationPhaseMatrix_TC1() throws FileNotFoundException {
         Query query = new Query();
         query.changeDirectory("file");
-        query.getDirectory().loadDocumentsContent();
 
     }
 

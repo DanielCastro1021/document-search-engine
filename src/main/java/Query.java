@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
@@ -138,7 +139,7 @@ public class Query {
      * @return This returns true if the path was successfully entered, false if this does not happen.
      */
 
-    public boolean changeDirectory(String path) {
+    public boolean changeDirectory(String path) throws FileNotFoundException {
         if (path == null) {
             return false;
         } else {
@@ -374,9 +375,9 @@ public class Query {
         if (results != null) {
             double[] arrayD = results;
             String[] arrayS = new String[results.length];
-
+            File[]listOfFiles=this.directory.getListOfFiles();
             for (int i = 0; i < arrayS.length; i++) {
-                arrayS[i] = this.directory.loadDocuments()[i].getName();
+                arrayS[i] = listOfFiles[i].getName();
             }
 
             for (int i = 0; i < results.length; i++) {
@@ -400,10 +401,9 @@ public class Query {
     /**
      * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param input This is an array of doubles with the the rate of simulation of each file
-     * @param numberOfFiles This is the number of files that the user wants to be shown in the return of this method
-     * @return This method returns by order, the name of the documents according
-     * to the search made by the user
+     * @param input         This is an array of doubles with the the rate of simulation of each file.
+     * @param numberOfFiles This is the number of files that the user wants to be shown in the return of this method.
+     * @return This method returns by order, the name of the documents according to the search made by the user
      */
     public String[] getResultsByNumberOfFiles(double[] input, int numberOfFiles) {
 
@@ -411,9 +411,9 @@ public class Query {
             double[] arrayD = input;
             String[] arrayS = new String[input.length];
             int contador = 0;
-
+            File[]listOfFiles=this.directory.getListOfFiles();
             for (int i = 0; i < arrayS.length; i++) {
-                arrayS[i] = this.directory.loadDocuments()[i].getName();
+                arrayS[i] = listOfFiles[i].getName();
             }
 
             for (int i = 0; i < input.length; i++) {
@@ -449,8 +449,7 @@ public class Query {
      *
      * @param results This is an array of doubles with the the rate of simulation of each file
      * @param degreeOfSimilarity
-     * @return This method returns by order, the name of the documents according
-     * to the search made by the user
+     * @return This method returns by order, the name of the documents according to the search made by the user
      */
     public String[] getResultsByDegreeOfSimilarity(double[] results, double degreeOfSimilarity) {
 
@@ -459,8 +458,9 @@ public class Query {
             String[] arrayS = new String[results.length];
             int contador = 0;
 
+            File[]listOfFiles=this.directory.getListOfFiles();
             for (int i = 0; i < arrayS.length; i++) {
-                arrayS[i] = this.directory.loadDocuments()[i].getName();
+                arrayS[i] = listOfFiles[i].getName();
             }
 
             for (int i = 0; i < results.length; i++) {

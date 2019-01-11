@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Directory {
 
 
-    private String DirPath;
+    private String directoryPath;
     private File[] listOfFiles;
     private String[] StringFiles;
 
@@ -28,9 +28,8 @@ public class Directory {
      * @param DirPath This is a Strin
      */
 
-    public void setDirPath(String DirPath) {
-        this.DirPath = DirPath;
-        getDocuments();
+    public void setDirectoryPath(String DirPath) {
+        this.directoryPath = DirPath;
     }
 
     public File[] getListOfFiles() {
@@ -47,13 +46,13 @@ public class Directory {
      * @return This returns a File array, that contains all documents that are in the repository.
      */
 
-    public File[] getDocuments() {
-        File dir = new File(this.DirPath);
+    public File[] loadDocuments() {
+        File dir = new File(this.directoryPath);
 
         if (dir.exists() && dir.list().length != 0) {
             this.listOfFiles = dir.listFiles();
 
-            if (listOfFiles != null) {
+            if (listOfFiles != null && listOfFiles.length>0) {
                 Arrays.sort(this.listOfFiles);
                 return this.listOfFiles;
             }
@@ -69,7 +68,7 @@ public class Directory {
      * @throws FileNotFoundException This throws an  FileNotFoundException, if isn´t possible to find a file.
      */
 
-    public String[] readFiles() throws FileNotFoundException {
+    public String[] loadDocumentsContent() throws FileNotFoundException {
         String[] StrFiles = new String[this.listOfFiles.length];
 
         for (int i = 0; i < this.listOfFiles.length; i++) {
