@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
@@ -16,69 +15,48 @@ public class Query {
         this.directory = new Directory();
     }
 
+
+    /**
+     * Constructor method of the Query Class .
+     */
+    public void Query(String directoryPath, String query) throws FileNotFoundException {
+        this.directory = new Directory();
+        changeDirectory(directoryPath);
+        this.directory.loadDocumentsContent();
+        getResults(calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query)));
+    }
+
     /**
      * Constructor method of the Query Class.
      */
-    public Query(String Dirpath, String query) throws FileNotFoundException {
+    public void Query(String directoryPath, String query, int numberOfFiles) throws FileNotFoundException {
         this.directory = new Directory();
-        changeDirectory(Dirpath);
-        this.directory.getDocuments();
-        this.directory.readFiles();
-        Query(query);
+        changeDirectory(directoryPath);
+        this.directory.loadDocumentsContent();
+        getResultsByNumberOfFiles(calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query)), numberOfFiles);
     }
 
     /**
-     *
+     * Constructor method of the Query Class.
      */
-    public void Query(String query) throws FileNotFoundException {
-
-
-        double[] results = calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query));
-        File[] files = this.directory.getListOfFiles();
-
-        if(results!=null) {
-            for (int i = 0; i < results.length; i++) {
-
-                System.out.println(results[i] +"=>"+ files[i].getName());
-
-            }
-        }else{
-
-        }
+    public void Query(String directoryPath, String query, double similarityDegree) throws FileNotFoundException {
+        this.directory = new Directory();
+        changeDirectory(directoryPath);
+        this.directory.loadDocumentsContent();
+        getResultsByDegreeOfSimilarity(calculationPhase(preparationPhaseMatrix(), preparationPhaseQuery(query)), similarityDegree);
     }
 
-     public Directory getDirectory( ){
-       return  this.directory;
-     }
 
-    /**
-     * This method allows you to insert a location from a repository with documents.
-     *
-     * @param path This is a String with the path to local folder of the repository with documents.
-     * @return This returns true if the path was successfully entered, false if this does not happen.
-     */
-
-    public boolean changeDirectory(String path) {
-        if (path == null) {
-            return false;
-        } else {
-            directory.setDirPath(path);
-
-            if (directory.getDocuments() == null) {
-                return false;
-            } else {
-                return true;
-            }
-        }
+    public Directory getDirectory() {
+        return directory;
     }
-
 
     /**
      * This method is responsible for loading of the documents in a repository, removing their punctuation and digits, and creating a search matrix.
      *
      * @return This returns an search matrix.
      */
-    public double[][] preparationPhaseMatrix() throws FileNotFoundException {
+    public double[][] preparationPhaseMatrix() {
         //Loading
         String[] docsStrings = this.directory.getStringFiles();
         //Removing punctuation and digits
@@ -88,11 +66,15 @@ public class Query {
         //Get Unique Words in Repository
         String[] uniqueWords = getUniqueWords(docsWords);
         //Create Search Matrix
-        getSearchMatrix(getOccurrenceMatrix(uniqueWords, docsWords));
         return getSearchMatrix(getOccurrenceMatrix(uniqueWords, docsWords));
     }
 
-    public double[] preparationPhaseQuery(String query) throws FileNotFoundException {
+    /**
+     * This method is responsible for removing punctuation and digits of query, and create an occurrence array.
+     *
+     * @return This returns an occurrence array.
+     */
+    public int[] preparationPhaseQuery(String query) {
         //Loading
         String[] docsStrings = this.directory.getStringFiles();
         //Removing punctuation and digits
@@ -110,7 +92,16 @@ public class Query {
         return getOccurrenceArray(uniqueWords, queryWords);
     }
 
-    public double[] calculationPhase(double[][] searchMatrix, double[] keyArray) {
+
+    /**
+     * This method is responsible for calculating the similarity degree of each document in repository.
+     *
+     * @param searchMatrix This is a search matrix of the documents in the repository.
+     * @param keyArray     This is an occurrence array of the query.
+     * @return This returns an occurrence array.
+     */
+
+    public double[] calculationPhase(double[][] searchMatrix, int[] keyArray) {
         double[] results = null;
         double sumMQ = 0;
         double sumM = 0;
@@ -121,18 +112,44 @@ public class Query {
 
 
             for (int line = 0; line < searchMatrix.length; line++) {
-                if (searchMatrix[0].length == keyArray.length){
+                if (searchMatrix[0].length == keyArray.length) {
                     for (int column = 0; column < searchMatrix[line].length; column++) {
                         sumMQ += (searchMatrix[line][column] * keyArray[column]);
                         sumM += searchMatrix[line][column];
                         sumQ += keyArray[column];
                     }
-                    results[line] = (sumMQ / (Math.abs(Math.sqrt(sumM)) * Math.abs(Math.sqrt(sumQ))));
+
+                    if (sumQ == 0 || sumM == 0) {
+                        results[line] = 0.0;
+                    } else {
+                        results[line] = (sumMQ / ((Math.sqrt(Math.pow(sumM, 2)) * Math.sqrt(Math.pow(sumQ, 2)))));
+                    }
                 }
             }
         }
 
         return results;
+    }
+
+    /**
+     * This method allows you to insert a location from a repository with documents.
+     *
+     * @param path This is a String with the path to local folder of the repository with documents.
+     * @return This returns true if the path was successfully entered, false if this does not happen.
+     */
+
+    public boolean changeDirectory(String path) {
+        if (path == null) {
+            return false;
+        } else {
+            directory.setDirectoryPath(path);
+
+            if (directory.loadDocuments() == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 
     /**
@@ -273,11 +290,11 @@ public class Query {
      * @param queryWords  This is an array of array of String, that contains the words of a Query.
      * @return This returns an array with the occurrence the words,of the Query, in all the documents of the repository.
      */
-    public double[] getOccurrenceArray(String[] uniqueWords, String[] queryWords) {
-        double[] occurrenceArray = null;
+    public int[] getOccurrenceArray(String[] uniqueWords, String[] queryWords) {
+        int[] occurrenceArray = null;
 
         if (uniqueWords != null && queryWords != null && uniqueWords.length > 0 && queryWords.length > 0) {
-            occurrenceArray = new double[uniqueWords.length];
+            occurrenceArray = new int[uniqueWords.length];
             for (int j = 0; j < uniqueWords.length; j++) {
                 for (int k = 0; k < queryWords.length; k++) {
                     if (uniqueWords[j].equals(queryWords[k])) {
@@ -348,58 +365,55 @@ public class Query {
     /**
      * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param input This is an array of doubles with the the rate of simulation of each file
+     * @param results This is an array of doubles with the the rate of simulation of each file
      * @return This method returns by order, the name of the documents according
      * to the search made by the user
      */
-    public String[] getResultadosNormais(Directory directory, double[] input) {
-        if (input != null){
+    public String[] getResults(double[] results) {
 
-        double[] arrayD = input;
-        String[] arrayS = new String[input.length];
+        if (results != null) {
+            double[] arrayD = results;
+            String[] arrayS = new String[results.length];
 
-        for (int i = 0; i < arrayS.length; i++) {
-            arrayS[i] = directory.getDocuments()[i].getName();
-        }
+            for (int i = 0; i < arrayS.length; i++) {
+                arrayS[i] = this.directory.loadDocuments()[i].getName();
+            }
 
-        for (int i = 0; i < input.length; i++) {
-            for (int j = i; j < input.length; j++) {
-                if (arrayD[i] < arrayD[j]) {
-                    double var = arrayD[i];
-                    String str = arrayS[i];
-                    arrayD[i] = arrayD[j];
-                    arrayS[i] = arrayS[j];
-                    arrayS[j] = str;
-                    arrayD[j] = var;
+            for (int i = 0; i < results.length; i++) {
+                for (int j = i; j < results.length; j++) {
+                    if (arrayD[i] < arrayD[j]) {
+                        double var = arrayD[i];
+                        String str = arrayS[i];
+                        arrayD[i] = arrayD[j];
+                        arrayS[i] = arrayS[j];
+                        arrayS[j] = str;
+                        arrayD[j] = var;
+                    }
                 }
             }
-        }
             return arrayS;
-        }else{
-            String[] arrayS = null;
-            return arrayS;
+        } else {
+            return null;
         }
     }
 
     /**
      * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param directory
      * @param input This is an array of doubles with the the rate of simulation of each file
-     * @param nficheiros This is the number of files that the user wants to be
-     * shown in the return of this method
+     * @param numberOfFiles This is the number of files that the user wants to be shown in the return of this method
      * @return This method returns by order, the name of the documents according
      * to the search made by the user
      */
-    public String[] getResultadosFicheiros(Directory directory, double[] input, int nficheiros) {
-        if(input != null && nficheiros > 0) {
+    public String[] getResultsByNumberOfFiles(double[] input, int numberOfFiles) {
 
+        if (input != null && numberOfFiles > 0) {
             double[] arrayD = input;
             String[] arrayS = new String[input.length];
             int contador = 0;
 
             for (int i = 0; i < arrayS.length; i++) {
-                arrayS[i] = directory.getDocuments()[i].getName();
+                arrayS[i] = this.directory.loadDocuments()[i].getName();
             }
 
             for (int i = 0; i < input.length; i++) {
@@ -414,69 +428,68 @@ public class Query {
                     }
                 }
                 contador++;
-                if (contador == nficheiros) {
+                if (contador == numberOfFiles) {
                     break;
                 }
             }
 
             String[] arrayS2 = new String[contador];
 
-            for(int p = 0; p<contador; p++){
+            for (int p = 0; p < contador; p++) {
                 arrayS2[p] = arrayS[p];
             }
             return arrayS2;
-        }else{
-            String[] arrayS = null;
-            return arrayS;
+        } else {
+            return null;
         }
     }
 
     /**
      * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param directory
-     * @param input This is an array of doubles with the the rate of simulation of each file
-     * @param grau
+     * @param results This is an array of doubles with the the rate of simulation of each file
+     * @param degreeOfSimilarity
      * @return This method returns by order, the name of the documents according
      * to the search made by the user
      */
-    public String[] getResultadosGrau(Directory directory, double[] input, double grau) {
-        if(input != null){
+    public String[] getResultsByDegreeOfSimilarity(double[] results, double degreeOfSimilarity) {
 
-        double[] arrayD = input;
-        String[] arrayS = new String[input.length];
-        int contador = 0;
+        if (results != null) {
+            double[] arrayD = results;
+            String[] arrayS = new String[results.length];
+            int contador = 0;
 
-        for (int i = 0; i < arrayS.length; i++) {
-            arrayS[i] = directory.getDocuments()[i].getName();
-        }
+            for (int i = 0; i < arrayS.length; i++) {
+                arrayS[i] = this.directory.loadDocuments()[i].getName();
+            }
 
-        for (int i = 0; i < input.length; i++) {
-            for (int j = i; j < input.length; j++) {
-                if (arrayD[i] < arrayD[j]) {
-                    double var = arrayD[i];
-                    String str = arrayS[i];
-                    arrayD[i] = arrayD[j];
-                    arrayS[i] = arrayS[j];
-                    arrayS[j] = str;
-                    arrayD[j] = var;
+            for (int i = 0; i < results.length; i++) {
+                for (int j = i; j < results.length; j++) {
+                    if (arrayD[i] < arrayD[j]) {
+                        double var = arrayD[i];
+                        String str = arrayS[i];
+                        arrayD[i] = arrayD[j];
+                        arrayS[i] = arrayS[j];
+                        arrayS[j] = str;
+                        arrayD[j] = var;
+                    }
                 }
+                if (arrayD[i] < degreeOfSimilarity) {
+                    break;
+                }
+                contador++;
             }
-            if (arrayD[i] < grau) {
-                break;
+
+            String[] arrayS2 = new String[contador];
+
+            for (int i = 0; i < contador; i++) {
+                arrayS2[i] = arrayS[i];
             }
-            contador++;
-        }
-
-        String[] arrayS2 = new String[contador];
-
-        for (int i = 0; i < contador; i++) {
-            arrayS2[i] = arrayS[i];
-        }
-        return arrayS2;
-    }else{
-        String[] arrayS = null;
-        return arrayS;
+            return arrayS2;
+        } else {
+            return null;
         }
     }
+
+
 }
