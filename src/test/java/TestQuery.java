@@ -1,12 +1,8 @@
+import query.Query;
 import org.junit.jupiter.api.Test;
-
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestQuery {
-
 
     @Test
     void changeDirectory_TC1() {
@@ -14,13 +10,11 @@ public class TestQuery {
         assertFalse(query.changeDirectory(null));
     }
 
-
     @Test
     void changeDirectory_TC2() {
         Query query = new Query();
         assertFalse(query.changeDirectory("testDirectories/testfile"));
     }
-
 
     @Test
     void changeDirectory_TC3() {
@@ -585,7 +579,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseQuery_TC1() throws FileNotFoundException {
+    void preparationPhaseQuery_TC1() {
         Query query = new Query();
         query.changeDirectory("testDirectories/file");
         query.getDirectory().loadDocumentsContent();
@@ -593,7 +587,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseQuery_TC2() throws FileNotFoundException {
+    void preparationPhaseQuery_TC2() {
         Query query = new Query();
         query.changeDirectory("testDirectories/file");
         query.getDirectory().loadDocumentsContent();
@@ -601,7 +595,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseQuery_TC3() throws FileNotFoundException {
+    void preparationPhaseQuery_TC3() {
         Query query = new Query();
         query.changeDirectory("testDirectories/file");
         query.getDirectory().loadDocumentsContent();
@@ -610,7 +604,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseQuery_TC4() throws FileNotFoundException {
+    void preparationPhaseQuery_TC4() {
         Query query = new Query();
         query.changeDirectory("testDirectories/file");
         query.getDirectory().loadDocumentsContent();
@@ -619,7 +613,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseQuery_TC5() throws FileNotFoundException {
+    void preparationPhaseQuery_TC5() {
         Query query = new Query();
         query.changeDirectory("testDirectories/file");
         query.getDirectory().loadDocumentsContent();
@@ -629,7 +623,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseQuery_TC6() throws FileNotFoundException {
+    void preparationPhaseQuery_TC6() {
         Query query = new Query();
         query.changeDirectory("testDirectories/file");
         query.getDirectory().loadDocumentsContent();
@@ -639,9 +633,8 @@ public class TestQuery {
         assertArrayEquals(arrayQuery, query.preparationPhaseQuery("Olá Programador."));
     }
 
-    /////////////////////////
     @Test
-    void preparationPhaseSearchMatrix_TC1() throws FileNotFoundException {
+    void preparationPhaseSearchMatrix_TC1() {
         Query query = new Query();
         query.changeDirectory("testF");
         query.getDirectory().loadDocumentsContent();
@@ -650,7 +643,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseSearchMatrix_TC2() throws FileNotFoundException {
+    void preparationPhaseSearchMatrix_TC2() {
         Query query = new Query();
         query.changeDirectory("testDirectories/emptyDirectory");
         query.getDirectory().loadDocumentsContent();
@@ -658,7 +651,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseSearchMatrix_TC3() throws FileNotFoundException {
+    void preparationPhaseSearchMatrix_TC3() {
         Query query = new Query();
         query.changeDirectory("testDirectories/emptyFile");
         query.getDirectory().loadDocumentsContent();
@@ -666,7 +659,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseSearchMatrix_TC4() throws FileNotFoundException {
+    void preparationPhaseSearchMatrix_TC4() {
         Query query = new Query();
         query.changeDirectory("testDirectories/file");
         query.getDirectory().loadDocumentsContent();
@@ -677,7 +670,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseSearchMatrix_TC5() throws FileNotFoundException {
+    void preparationPhaseSearchMatrix_TC5() {
         Query query = new Query();
         query.changeDirectory("testDirectories/emptyFiles");
         query.getDirectory().loadDocumentsContent();
@@ -685,7 +678,7 @@ public class TestQuery {
     }
 
     @Test
-    void preparationPhaseSearchMatrix_TC6() throws FileNotFoundException {
+    void preparationPhaseSearchMatrix_TC6() {
         Query query = new Query();
         query.changeDirectory("testDirectories/files");
         query.getDirectory().loadDocumentsContent();
@@ -705,5 +698,7 @@ public class TestQuery {
         searchMatrix[3][12] = 1.6020599913279625;
         assertArrayEquals(searchMatrix, query.preparationPhaseSearchMatrix());
     }
+
+
 
 }
