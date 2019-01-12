@@ -699,6 +699,96 @@ public class TestQuery {
         assertArrayEquals(searchMatrix, query.preparationPhaseSearchMatrix());
     }
 
+    @Test
+    void searchEngine_2TC1() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", null, 2);
+        String[] esperado = null;
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_2TC2() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine(null, "Hello", 2);
+        String[] esperado = null;
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_2TC3() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", "Hello", -2);
+        String[] esperado = null;
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_2TC4() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", "Hello", 0);
+        String[] esperado = null;
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_2TC5() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", "Hello", 2);
+        String[] esperado = {"1.txt","2.txt"};
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    /////////////////////////
+    @Test
+    void searchEngine_3TC1() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", null, 0.5);
+        String[] esperado = null;
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_3TC2() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine(null,"Hello", 0.5);
+        String[] esperado = null;
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_3TC3() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", "Hello", -0.5);
+        String[] esperado = {"1.txt","2.txt","3.txt","4.txt"};
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_3TC4() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", "Hello", 0.0);
+        String[] esperado = {"1.txt","2.txt","3.txt","4.txt"};
+
+        assertArrayEquals(esperado, resultado);
+    }
+
+    @Test
+    void searchEngine_3TC5() {
+        Query query = new Query();
+        String[] resultado = query.searchEngine("testDirectories/files", "Hello", 0.5);
+        String[] esperado = {"1.txt"};
+
+        assertArrayEquals(esperado, resultado);
+    }
 
 
 }
