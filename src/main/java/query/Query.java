@@ -377,22 +377,19 @@ public class Query {
             String[] arrayS = this.directory.getNameFiles();
             int counter = 0;
 
-            for (int i = 0; i < results.length; i++) {
-                for (int j = i; j < results.length; j++) {
-                    if (results[i] < results[j]) {
-                        double var = results[i];
-                        String str = arrayS[i];
-                        results[i] = results[j];
-                        arrayS[i] = arrayS[j];
-                        arrayS[j] = str;
-                        results[j] = var;
-                    }
-                }
-                counter++;
-                if (counter == numberOfFiles) {
-                    break;
-                }
-            }
+           while(counter<numberOfFiles) {
+               for (int j = counter; j < results.length; j++) {
+                   if (results[counter] < results[j]) {
+                       double var = results[counter];
+                       String str = arrayS[counter];
+                       results[counter] = results[j];
+                       arrayS[counter] = arrayS[j];
+                       arrayS[j] = str;
+                       results[j] = var;
+                   }
+               }
+               counter++;
+           }
             arrayS2 = new String[counter];
             System.arraycopy(arrayS, 0, arrayS2, 0, counter);
             return arrayS2;

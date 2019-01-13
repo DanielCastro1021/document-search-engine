@@ -17,7 +17,7 @@ public class Directory {
     private String[] stringFiles;
 
     /**
-     * This method allows to change the directory of the repository with documents.
+     * This method allows to set the directory path of the repository.
      *
      * @param directoryPath This is a String that contains a path of a directory.
      */
@@ -25,6 +25,7 @@ public class Directory {
     public void setDirectoryPath(String directoryPath) {
         this.directoryPath = directoryPath;
     }
+
 
     /**
      * This method returns the files that exist in an Directory.
@@ -34,6 +35,7 @@ public class Directory {
     public String[] getStringFiles() {
         return stringFiles;
     }
+
 
     /**
      * This method returns the names of the files that exist in an Directory.
