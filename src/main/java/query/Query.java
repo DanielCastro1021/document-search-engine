@@ -1,5 +1,4 @@
 package query;
-
 import java.util.Arrays;
 
 /**
@@ -16,13 +15,10 @@ public class Query {
         this.directory = new Directory();
     }
 
-
     /**
-     * This method returns the names of all the files in a repository, ordered by their degree of similarity with the query.
-     *
-     * @param directoryPath This is a String, that contains the path of a directory.
-     * @param query         This is a String, that contains a query.
-     * @return This returns an array of String, with the names of the files.
+     * @param directoryPath
+     * @param query
+     * @return
      */
     public String[] searchEngine(String directoryPath, String query) {
         changeDirectory(directoryPath);
@@ -31,12 +27,10 @@ public class Query {
     }
 
     /**
-     * This method returns the names of a certain number of files in a repository, ordered by their degree of similarity with the query.
-     *
-     * @param directoryPath This is a String, that contains the path of a directory.
-     * @param query         This is a String, that contains a query.
-     * @param numberOfFiles This is an integer, that contains the number of files pretended.
-     * @return This returns an array of String, with the names of the files.
+     * @param directoryPath
+     * @param query
+     * @param numberOfFiles
+     * @return
      */
     public String[] searchEngine(String directoryPath, String query, int numberOfFiles) {
         changeDirectory(directoryPath);
@@ -45,12 +39,10 @@ public class Query {
     }
 
     /**
-     * This method returns the names of files in a repository, that have a superior degree of similarity that is defined, ordered by their degree of similarity with the query.
-     *
-     * @param directoryPath    This is a String, that contains the path of a directory.
-     * @param query            This is a String, that contains a query.
-     * @param similarityDegree This is an double, that contains the minin
-     * @return This returns an array of String, with the names of the files.
+     * @param directoryPath
+     * @param query
+     * @param similarityDegree
+     * @return
      */
     public String[] searchEngine(String directoryPath, String query, double similarityDegree) {
         changeDirectory(directoryPath);
@@ -59,9 +51,7 @@ public class Query {
     }
 
     /**
-     * This method return an Directory Class of a Query Class.
-     *
-     * @return This returns a Directory Class.
+     * @return
      */
     public Directory getDirectory() {
         return directory;
@@ -73,10 +63,15 @@ public class Query {
      * @return This returns an search matrix.
      */
     public double[][] preparationPhaseSearchMatrix() {
+        //Loading
         String[] docsStrings = this.directory.getStringFiles();
+        //Removing punctuation and digits
         docsStrings = cleanStrings(docsStrings);
+        //Spilt Words in Repository
         String[][] docsWords = splitRepositoryByWords(docsStrings);
+        //Get Unique Words in Repository
         String[] uniqueWords = getUniqueWords(docsWords);
+        //Create Search Matrix
         return getSearchMatrix(getOccurrenceMatrix(uniqueWords, docsWords));
     }
 
@@ -86,14 +81,23 @@ public class Query {
      * @return This returns an occurrence array.
      */
     public int[] preparationPhaseQuery(String query) {
+        //Loading
         String[] docsStrings = this.directory.getStringFiles();
+        //Removing punctuation and digits
         docsStrings = cleanStrings(docsStrings);
+        //Spilt Words in Repository
         String[][] docsWords = splitRepositoryByWords(docsStrings);
+        //Get Unique Words in Repository
         String[] uniqueWords = getUniqueWords(docsWords);
+
+        //Removing punctuation and digits
         String cleanQuery = cleanString(query);
+        //Spilt Words Query
         String[] queryWords = splitStringByWords(cleanQuery);
+
         return getOccurrenceArray(uniqueWords, queryWords);
     }
+
 
     /**
      * This method is responsible for calculating the similarity degree of each document in repository.
@@ -102,6 +106,7 @@ public class Query {
      * @param keyArray     This is an occurrence array of the query.
      * @return This returns an occurrence array.
      */
+
     public double[] calculationPhase(double[][] searchMatrix, int[] keyArray) {
         double[] results = null;
         double sumMQ = 0;
@@ -124,6 +129,8 @@ public class Query {
                 }
             }
         }
+
+
         return results;
     }
 
@@ -133,6 +140,7 @@ public class Query {
      * @param path This is a String with the path to local folder of the repository with documents.
      * @return This returns true if the path was successfully entered, false if this does not happen.
      */
+
     public boolean changeDirectory(String path) {
         if (path == null) {
             return false;
@@ -148,6 +156,8 @@ public class Query {
      * @param string This is a String.
      * @return This returns a String with spaces instead of punctuation and digits.
      */
+
+
     public String cleanString(String string) {
         String cleanString = null;
 
@@ -164,12 +174,15 @@ public class Query {
         return cleanString;
     }
 
+
     /**
      * This method replaces punctuation and digits with spaces in a collection of documents.
      *
      * @param strings This is an array of String, that contain the content of each document in the repository.
      * @return This returns an array with all the content of each document in the repository with spaces instead of punctuation and digits.
      */
+
+
     public String[] cleanStrings(String[] strings) {
         String[] cleanDocStrings = null;
 
@@ -182,12 +195,15 @@ public class Query {
         return cleanDocStrings;
     }
 
+
     /**
      * This method separates a String by words.
      *
      * @param string This is a String.
      * @return This returns an array of String, that contains all the words of String.
      */
+
+
     public String[] splitStringByWords(String string) {
         String[] words = null;
 
@@ -197,12 +213,15 @@ public class Query {
         return words;
     }
 
+
     /**
      * This method separates the contents of documents in the repository, by words.
      *
      * @param strings This is an array of String with Strings that contain the content of each document in the repository.
      * @return This returns an array of array of String, that contains all content of documents in the repository separated by words.
      */
+
+
     public String[][] splitRepositoryByWords(String[] strings) {
         String[][] stringsWords = null;
 
@@ -215,12 +234,14 @@ public class Query {
         return stringsWords;
     }
 
+
     /**
      * This method returns all unique words in the repository.
      *
      * @param stringsWords This is an array of array of String that contain the content of each document in the repository, separated by words.
      * @return This returns an array of String, that contains all the unique words in the documents of the repository.
      */
+
     public String[] getUniqueWords(String[][] stringsWords) {
         String[] uniqueWords = null;
         int k = 0;
@@ -234,6 +255,8 @@ public class Query {
                 }
             }
             uniqueWords = Arrays.stream(uniqueWords).distinct().toArray(String[]::new);
+
+
         }
         return uniqueWords;
     }
@@ -244,6 +267,7 @@ public class Query {
      * @param stringsWords This is an array of array of String, that contains all the words of the repository.
      * @return This returns the total number of words in an array of String arrays.
      */
+
     public int getTotalWords(String[][] stringsWords) {
         int totalWords = 0;
 
@@ -287,22 +311,25 @@ public class Query {
      * @param stringsWords This is an array of array of String, that contains the words of each document.
      * @return This returns a matrix with the occurrence the words ,of the repository, in all the documents of the repository.
      */
+
     public int[][] getOccurrenceMatrix(String[] uniqueWords, String[][] stringsWords) {
+
         int[][] occurrenceMatrix = null;
 
-        if (uniqueWords == null || stringsWords == null || uniqueWords.length <= 0 || stringsWords.length <= 0) {
+        if(uniqueWords==null || stringsWords==null || uniqueWords.length<=0 || stringsWords.length<=0 ) {
             return occurrenceMatrix;
         }
-        occurrenceMatrix = new int[stringsWords.length][uniqueWords.length];
-        for (int i = 0; i < stringsWords.length; i++) {
-            for (int j = 0; j < uniqueWords.length; j++) {
-                for (int k = 0; k < stringsWords[i].length; k++) {
-                    if (uniqueWords[j].equals(stringsWords[i][k])) {
-                        occurrenceMatrix[i][j]++;
+            occurrenceMatrix = new int[stringsWords.length][uniqueWords.length];
+            for (int i = 0; i < stringsWords.length; i++) {
+                for (int j = 0; j < uniqueWords.length; j++) {
+                    for (int k = 0; k < stringsWords[i].length; k++) {
+                        if (uniqueWords[j].equals(stringsWords[i][k])) {
+                            occurrenceMatrix[i][j]++;
+                        }
                     }
                 }
             }
-        }
+
         return occurrenceMatrix;
     }
 
@@ -319,28 +346,30 @@ public class Query {
         if (occurrenceMatrix == null) {
             return searchMatrix;
         }
-        searchMatrix = new double[occurrenceMatrix.length][occurrenceMatrix[0].length];
-        for (int i = 0; i < occurrenceMatrix.length; i++) {
-            for (int j = 0; j < occurrenceMatrix[0].length; j++) {
-                d = 0;
-                for (int[] occurrenceMatrix1 : occurrenceMatrix) {
-                    if (occurrenceMatrix1[j] != 0) {
-                        d++;
+            searchMatrix = new double[occurrenceMatrix.length][occurrenceMatrix[0].length];
+            for (int i = 0; i < occurrenceMatrix.length; i++) {
+                for (int j = 0; j < occurrenceMatrix[0].length; j++) {
+                    d = 0;
+                    for (int[] occurrenceMatrix1 : occurrenceMatrix) {
+                        if (occurrenceMatrix1[j] != 0) {
+                            d++;
+                        }
+                    }
+                    if (d != 0) {
+                        searchMatrix[i][j] = occurrenceMatrix[i][j] * (1 + Math.log10((double) occurrenceMatrix.length / d));
                     }
                 }
-                if (d != 0) {
-                    searchMatrix[i][j] = occurrenceMatrix[i][j] * (1 + Math.log10((double) occurrenceMatrix.length / d));
-                }
             }
-        }
+
         return searchMatrix;
     }
 
     /**
-     * This method returns the files ordered by their degree of similarity (Highest to Lowest).
+     * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param results This is an array of doubles with the the degree of similarity of each file in the repository.
-     * @return This an array of String, with the name os the files in repository.
+     * @param results This is an array of doubles with the the rate of simulation of each file
+     * @return This method returns by order, the name of the documents according
+     * to the search made by the user
      */
     public String[] getResults(double[] results) {
         String[] arrayS = null;
@@ -361,14 +390,15 @@ public class Query {
             return arrayS;
         }
         return arrayS;
+
     }
 
     /**
-     * This method returns a certain number of the files ordered by their rate of simulation (Highest to Lowest)
+     * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param results       This is an array of doubles with the the degree of similarity of each file in the repository.
+     * @param results       This is an array of doubles with the the rate of simulation of each file.
      * @param numberOfFiles This is the number of files that the user wants to be shown in the return of this method.
-     * @return This an array of String, with the name os the files in repository.
+     * @return This method returns by order, the name of the documents according to the search made by the user
      */
     public String[] getResultsByNumberOfFiles(double[] results, int numberOfFiles) {
         String[] arrayS2 = null;
@@ -403,9 +433,9 @@ public class Query {
     /**
      * This method returns the files ordered by their rate of simulation (Highest to Lowest)
      *
-     * @param results            This is an array of doubles with the the degree of similarity of each file in the repository.
+     * @param results            This is an array of doubles with the the rate of simulation of each file.
      * @param degreeOfSimilarity This is the minimum degreeOfSimilarity defined by the User.
-     * @return This an array of String, with the name os the files in repository.
+     * @return This method returns by crescent order, he name of the documents according to the search made by the user.
      */
     public String[] getResultsByDegreeOfSimilarity(double[] results, double degreeOfSimilarity) {
         int counter = 0;
@@ -434,5 +464,8 @@ public class Query {
             return arrayS2;
         }
         return arrayS2;
+
     }
+
+
 }
