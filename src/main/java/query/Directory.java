@@ -12,11 +12,9 @@ import java.util.Scanner;
  */
 
 public class Directory {
-
     private String directoryPath;
     private File[] listOfFiles;
     private String[] stringFiles;
-
 
     /**
      * This method allows to change the directory of the repository with documents.

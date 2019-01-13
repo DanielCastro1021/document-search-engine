@@ -334,6 +334,53 @@ public class TestQuery {
     }
 
     @Test
+    void getOccurrenceArray_TC1() {
+        Query query = new Query();
+        String[] uniqueWords = {"tudo", "bem"};
+        String[] queryWords = {"Ola"};
+        int[] expected = {0, 0};
+        assertArrayEquals(expected, query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    void getOccurrenceArray_TC2() {
+        Query query = new Query();
+        String[] uniqueWords = {"Ola", "tudo", "bem"};
+        String[] queryWords = {"Ola"};
+        int[] expected = {1, 0, 0};
+        assertArrayEquals(expected, query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    void getOccurrenceArray_TC3() {
+        Query query = new Query();
+        String[] uniqueWords = {"Ola", "tudo", "bem"};
+        String[] queryWords = {"Ola", "Ola"};
+        int[] expected = {2, 0, 0};
+        assertArrayEquals(expected, query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    void getOccurrenceArray_TC4() {
+        Query query = new Query();
+        String[] queryWords = {"Ola", "tudo"};
+        assertArrayEquals(null, query.getOccurrenceArray(null, queryWords));
+    }
+
+    @Test
+    void getOccurrenceArray_TC5() {
+        Query query = new Query();
+        String[] uniqueWords = {"Ola", "tudo"};
+        assertArrayEquals(null, query.getOccurrenceArray(uniqueWords, null));
+    }
+
+    @Test
+    void getOccurrenceArray_TC6() {
+        Query query = new Query();
+        assertArrayEquals(null, query.getOccurrenceArray(null, null));
+    }
+
+    @Test
     void getSearchMatrix_TC1() {
         Query query = new Query();
         assertArrayEquals(null, query.getSearchMatrix(null));
@@ -689,6 +736,53 @@ public class TestQuery {
     }
 
     @Test
+    void calculationPhase_TC1() {
+        Query query = new Query();
+        assertArrayEquals(null, query.calculationPhase(null, null));
+    }
+
+    @Test
+    void calculationPhase_TC2() {
+        Query query = new Query();
+        double[][] searchMatrix = {{1, 0}, {0, 1}};
+        assertArrayEquals(null, query.calculationPhase(searchMatrix, null));
+    }
+
+    @Test
+    void calculationPhase_TC3() {
+        Query query = new Query();
+        int[] keyArray = {1, 0};
+        assertArrayEquals(null, query.calculationPhase(null, keyArray));
+    }
+
+    @Test
+    void calculationPhase_TC4() {
+        Query query = new Query();
+        int[] keyArray = {1, 0};
+        double[][] searchMatrix = {{1, 0}, {0, 1}};
+        double[] expected = {1, 0.25};
+        assertArrayEquals(expected, query.calculationPhase(searchMatrix, keyArray));
+    }
+
+    @Test
+    void calculationPhase_TC5() {
+        Query query = new Query();
+        int[] keyArray = {1, 0};
+        double[][] searchMatrix = {{0, 0}, {0, 0}};
+        double[] expected = {0, 0};
+        assertArrayEquals(expected, query.calculationPhase(searchMatrix, keyArray));
+    }
+
+    @Test
+    void calculationPhase_TC6() {
+        Query query = new Query();
+        int[] keyArray = {0, 0};
+        double[][] searchMatrix = {{1, 0}, {2, 1}};
+        double[] expected = {0, 0};
+        assertArrayEquals(expected, query.calculationPhase(searchMatrix, keyArray));
+    }
+
+    @Test
     void searchEngine_1TC1() {
         Query query = new Query();
         assertArrayEquals(null, query.searchEngine(null, ""));
@@ -834,98 +928,6 @@ public class TestQuery {
         assertArrayEquals(expected, query.searchEngine("testDirectories/files", "Hello", 0.5));
     }
 
-    @Test
-    void occurrenceArray_TC1() {
-        Query query = new Query();
-        String[] uniqueWords = {"tudo", "bem"};
-        String[] queryWords = {"Ola"};
-        int[] expected = {0, 0};
-        assertArrayEquals(expected, query.getOccurrenceArray(uniqueWords, queryWords));
-    }
 
-    @Test
-    void occurrenceArray_TC2() {
-        Query query = new Query();
-        String[] uniqueWords = {"Ola", "tudo", "bem"};
-        String[] queryWords = {"Ola"};
-        int[] expected = {1, 0, 0};
-        assertArrayEquals(expected, query.getOccurrenceArray(uniqueWords, queryWords));
-    }
-
-    @Test
-    void occurrenceArray_TC3() {
-        Query query = new Query();
-        String[] uniqueWords = {"Ola", "tudo", "bem"};
-        String[] queryWords = {"Ola", "Ola"};
-        int[] expected = {2, 0, 0};
-        assertArrayEquals(expected, query.getOccurrenceArray(uniqueWords, queryWords));
-    }
-
-    @Test
-    void occurrenceArray_TC4() {
-        Query query = new Query();
-        String[] queryWords = {"Ola", "tudo"};
-        assertArrayEquals(null, query.getOccurrenceArray(null, queryWords));
-    }
-
-    @Test
-    void occurrenceArray_TC5() {
-        Query query = new Query();
-        String[] uniqueWords = {"Ola", "tudo"};
-        assertArrayEquals(null, query.getOccurrenceArray(uniqueWords, null));
-    }
-
-    @Test
-    void occurrenceArray_TC6() {
-        Query query = new Query();
-        assertArrayEquals(null, query.getOccurrenceArray(null, null));
-    }
-
-    @Test
-    void calculationPhase_TC1() {
-        Query query = new Query();
-        assertArrayEquals(null, query.calculationPhase(null, null));
-    }
-
-    @Test
-    void calculationPhase_TC2() {
-        Query query = new Query();
-        double[][] searchMatrix = {{1, 0}, {0, 1}};
-        assertArrayEquals(null, query.calculationPhase(searchMatrix, null));
-    }
-
-    @Test
-    void calculationPhase_TC3() {
-        Query query = new Query();
-        int[] keyArray = {1, 0};
-        assertArrayEquals(null, query.calculationPhase(null, keyArray));
-    }
-
-    @Test
-    void calculationPhase_TC4() {
-        Query query = new Query();
-        int[] keyArray = {1, 0};
-        double[][] searchMatrix = {{1, 0}, {0, 1}};
-        double[] expected = {1, 0.25};
-        assertArrayEquals(expected, query.calculationPhase(searchMatrix, keyArray));
-    }
-
-    @Test
-    void calculationPhase_TC5() {
-        Query query = new Query();
-        int[] keyArray = {1, 0};
-        double[][] searchMatrix = {{0, 0}, {0, 0}};
-        double[] expected = {0, 0};
-        assertArrayEquals(expected, query.calculationPhase(searchMatrix, keyArray));
-    }
-
-    @Test
-    void calculationPhase_TC6() {
-        Query query = new Query();
-        int[] keyArray = {0, 0};
-        double[][] searchMatrix = {{1, 0}, {2, 1}};
-        double[] expected = {0, 0};
-        assertArrayEquals(expected, query.calculationPhase(searchMatrix, keyArray));
-    }
 }
 
