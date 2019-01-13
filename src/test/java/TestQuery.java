@@ -790,5 +790,106 @@ public class TestQuery {
         assertArrayEquals(esperado, resultado);
     }
 
+    @Test
+    public void TC_OccurrencyArray1(){
+        String [] uniqueWords = {"tudo","bem"};
+        String[] queryWords ={"Ola"};
+        int [] expected = {0, 0};
+        Query query = new Query();
+        assertArrayEquals(expected,query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    public void TC_OccurrencyArray2(){
+        String [] uniqueWords = {"Ola","tudo","bem"};
+        String[] queryWords ={"Ola"};
+        int [] expected = {1 ,0, 0};
+        Query query = new Query();
+        assertArrayEquals(expected,query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    public void TC_OccurrencyArray3(){
+        String [] uniqueWords = {"Ola","tudo","bem"};
+        String[] queryWords ={"Ola","Ola"};
+        int [] expected = {2 ,0, 0};
+        Query query = new Query();
+        assertArrayEquals(expected,query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    public void TC_OccurrencyArray4(){
+        String [] uniqueWords = null;
+        String[] queryWords ={"Ola","tudo"};
+        Query query = new Query();
+        assertArrayEquals(null,query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    public void TC_OccurrencyArray5(){
+        String [] uniqueWords = {"Ola","tudo"};
+        String[] queryWords = null;
+        Query query = new Query();
+        assertArrayEquals(null,query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    public void TC_OccurrencyArray6(){
+        String [] uniqueWords = null;
+        String[] queryWords = null;
+        Query query = new Query();
+        assertArrayEquals(null,query.getOccurrenceArray(uniqueWords, queryWords));
+    }
+
+    @Test
+    public void TC_calculationPhase1(){
+        double[][] searchMatrix = null;
+        int[] keyArray = null;
+        Query query = new Query();
+        assertArrayEquals(null,query.calculationPhase(searchMatrix,keyArray));
+    }
+
+    @Test
+    public void TC_calculationPhase2(){
+        double[][] searchMatrix = { { 1, 0 }, { 0, 1 }};
+        int[] keyArray = null;
+        Query query = new Query();
+        assertArrayEquals(null,query.calculationPhase(searchMatrix,keyArray));
+    }
+
+    @Test
+    public void TC_calculationPhase3(){
+        double[][] searchMatrix = null;
+        int[] keyArray = {1,0};
+        Query query = new Query();
+        assertArrayEquals(null,query.calculationPhase(searchMatrix,keyArray));
+    }
+
+    @Test
+    public void TC_calculationPhase4(){
+        double[][] searchMatrix ={ { 1, 0 }, { 0, 1 }};;
+        int[] keyArray = {1,0};
+        double[] expected = {1,0.25};
+        Query query = new Query();
+        assertArrayEquals(expected,query.calculationPhase(searchMatrix,keyArray));
+    }
+
+    @Test
+    public void TC_calculationPhase5(){
+        double[][] searchMatrix ={ { 0, 0 }, { 0, 0 }};;
+        int[] keyArray = {1,0};
+        double[] expected = {0,0};
+        Query query = new Query();
+        assertArrayEquals(expected,query.calculationPhase(searchMatrix,keyArray));
+    }
+
+    @Test
+    public void TC_calculationPhase6(){
+        double[][] searchMatrix ={ { 1, 0 }, { 2, 1 }};
+        int[] keyArray = {0,0};
+        double[] expected = {0,0};
+        Query query = new Query();
+        assertArrayEquals(expected,query.calculationPhase(searchMatrix,keyArray));
+    }
 
 }
