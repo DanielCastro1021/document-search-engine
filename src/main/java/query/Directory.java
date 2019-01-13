@@ -11,12 +11,12 @@ import java.util.Scanner;
  * @author danielcastro
  */
 
-
 public class Directory {
 
     private String directoryPath;
     private File[] listOfFiles;
     private String[] stringFiles;
+
 
     /**
      * This method allows to change the directory of the repository with documents.
@@ -28,16 +28,19 @@ public class Directory {
         this.directoryPath = directoryPath;
     }
 
-
     /**
-     * @return
+     * This method returns the files that exist in an Directory.
+     *
+     * @return This returns an array of File.
      */
     public String[] getStringFiles() {
         return stringFiles;
     }
 
     /**
-     * @return
+     * This method returns the names of the files that exist in an Directory.
+     *
+     * @return This returns an array of String.
      */
     public String[] getNameFiles() {
         String[] names = null;
@@ -53,7 +56,7 @@ public class Directory {
     /**
      * This method is responsible for loading the documents located in the repository.
      *
-     * @return This returns a File array, that contains all documents that are in the repository.
+     * @return This returns an array of File, that contains all documents that are in the repository.
      */
 
     public File[] loadDocuments() {
@@ -61,15 +64,12 @@ public class Directory {
         File[] files = null;
         if (dir.exists() && Objects.requireNonNull(dir.list()).length != 0) {
             files = dir.listFiles();
-            if (files != null) {
-                Arrays.sort(files);
-                this.listOfFiles = files;
-                return files;
-            }
+            Arrays.sort(files);
+            this.listOfFiles = files;
+            return files;
         }
         return files;
     }
-
 
     /**
      * This method is responsible for reading the content of each document int the repository.
