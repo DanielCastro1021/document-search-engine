@@ -11,19 +11,17 @@ public class TestDirectory {
     public void loadDocuments_TC1(){
         Directory directory = new Directory();
         directory.setDirectoryPath("");
-        File[] resultado = directory.loadDocuments();
-
-        assertEquals(null, resultado);
+        File[] results = directory.loadDocuments();
+        assertEquals(null, results);
     }
 
     @Test
     public void loadDocuments_TC2(){
         Directory directory = new Directory();
         directory.setDirectoryPath("testDirectories/files");
-        File[] resultado = directory.loadDocuments();
-        File[] esperado = {new File("testDirectories\\files\\1.txt"), new File("testDirectories\\files\\2.txt"), new File("testDirectories\\files\\3.txt"), new File("testDirectories\\files\\4.txt")};
-
-        assertArrayEquals(esperado, resultado);
+        File[] results = directory.loadDocuments();
+        File[] expected = {new File("testDirectories/files/1.txt"), new File("testDirectories/files/2.txt"), new File("testDirectories/files/3.txt"), new File("testDirectories/files/4.txt")};
+        assertArrayEquals(expected, results);
     }
 
     @Test
@@ -31,10 +29,8 @@ public class TestDirectory {
         Directory directory = new Directory();
         directory.setDirectoryPath("");
         directory.loadDocuments();
-        String[] resultado = directory.getNameFiles();
-        String[] esperado = null;
-
-        assertArrayEquals(esperado, resultado);
+        String[] results = directory.getNameFiles();
+        assertArrayEquals(null, results);
     }
 
     @Test
@@ -42,10 +38,9 @@ public class TestDirectory {
         Directory directory = new Directory();
         directory.setDirectoryPath("testDirectories/files");
         directory.loadDocuments();
-        String[] resultado = directory.getNameFiles();
-        String[] esperado = {"1.txt","2.txt","3.txt","4.txt"};
-
-        assertArrayEquals(esperado, resultado);
+        String[] results = directory.getNameFiles();
+        String[] expected = {"1.txt","2.txt","3.txt","4.txt"};
+        assertArrayEquals(expected, results);
     }
 
     @Test
@@ -53,9 +48,8 @@ public class TestDirectory {
         Directory directory = new Directory();
         directory.setDirectoryPath("");
         directory.loadDocumentsContent();
-        String[] resultado = directory.getStringFiles();
-
-        assertArrayEquals(null, resultado);
+        String[] results = directory.getStringFiles();
+        assertArrayEquals(null, results);
     }
 
     @Test
@@ -64,10 +58,9 @@ public class TestDirectory {
         directory.setDirectoryPath("testDirectories/directoryFile");
         directory.loadDocuments();
         directory.loadDocumentsContent();
-        String[] resultado = directory.getStringFiles();
-        String[] esperado ={"Ola"};
-
-        assertArrayEquals(esperado, resultado);
+        String[] results = directory.getStringFiles();
+        String[] expected ={"Ola"};
+        assertArrayEquals(expected, results);
     }
 
 }
